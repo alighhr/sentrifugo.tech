@@ -948,8 +948,24 @@ if($loginuserRole == SUPERADMINROLE)
                      
                         
                     
-			<?php } ?>
-				<a href="<?php echo $_SERVER['REMOTER_ADDR']; ?>/AlignHR" id="EngageMe" class="EngageMe_btn">EngageMe</a>
+			<?php } 
+                $EngageMeFolder = 'AlignHR';
+                $ServerArr = (!empty($_SERVER['REQUEST_URI'])) ? explode("/", $_SERVER['REQUEST_URI']) : array();
+                if(!empty($ServerArr[1])){
+                    switch ($ServerArr[1]) {
+                        case 'demo-sentrifugo':
+                            $EngageMeFolder = 'demo';
+                            break;
+                        case 'wawilson-sentrifugo':
+                            $EngageMeFolder = 'wawilson';
+                            break;
+                        default:
+                            $EngageMeFolder = 'AlignHR';
+                            break;
+                    }
+                }
+            ?>
+				<a href="<?php echo $_SERVER['REMOTER_ADDR']; ?>/<?php echo $EngageMeFolder; ?>" id="EngageMe" class="EngageMe_btn">EngageMe</a>
 			<?php if($loginuserGroup == HR_GROUP)
 				{?>
 					<!-- <div class="configurewizard"> 

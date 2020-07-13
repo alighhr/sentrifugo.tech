@@ -349,13 +349,14 @@ class Default_IndexController extends Zend_Controller_Action
 
 	}
 
-
 	public function sendpasswordAction()
 	{
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('sendpassword', 'json')->initContext();
 
-		$emailaddress = $this->_request->getParam('emailaddress');
+		$emailaddress     = $this->_request->getParam('emailaddress');
+		$isengageme       = $this->_request->getParam('isengageme');
+		$engagemepassword = $this->_request->getParam('engagemepassword');
 		$user= new Default_Model_Users();
 
 		$result['result'] = '';
@@ -379,6 +380,13 @@ class Default_IndexController extends Zend_Controller_Action
 			$username = $emailexists[0]['userfullname'];
 			if($emailcount >0)
 			{
+				/* For engageme api */
+				if(!empty($isengageme) && $isengageme == 'yes'){
+					$user->updatePwd($engagemepassword,$emailaddress);
+					$result['result'] = 'success';
+					$result['message'] = 'success';
+					$this->_helper->json($result);exit;
+				}
 				$generatedPswd = uniqid();
 				$encodedPswd = md5($generatedPswd);
 				$user->updatePwd($encodedPswd,$emailaddress);
